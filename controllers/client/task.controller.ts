@@ -7,12 +7,28 @@ export const index = async (req: Request, res: Response) => {
     deleted: false
   };
   
+  // Lọc theo trạng thái
   const status = req.query.status;
 
   if(status) {
     find["status"] = status;
   }
-  const tasks = await Task.find(find);
+  // Hết lọc theo trạng thái
+
+  // Sắp xếp theo tiêu chí
+  const sort = {};
+
+  const sortKey = `${req.query.sortKey}`;
+  const sortValue = req.query.sortValue;
+
+  if(sortKey && sortValue) {
+    sort[sortKey] = sortValue;
+  }
+  // Hết Sắp xếp theo tiêu chí
+  
+  const tasks = await Task
+  .find(find)
+  .sort(sort);
 
   res.json(tasks);
 }
