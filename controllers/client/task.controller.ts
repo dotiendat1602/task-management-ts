@@ -3,19 +3,28 @@ import { Request, Response } from "express";
 
 // [GET] /tasks
 export const index = async (req: Request, res: Response) => {
-    const tasks = await Task.find({});
+  const find = {
+    deleted: false
+  };
+  
+  const status = req.query.status;
 
-    res.json(tasks);
+  if(status) {
+    find["status"] = status;
+  }
+  const tasks = await Task.find(find);
+
+  res.json(tasks);
 }
 
 // [GET] /tasks/detail/:id
 export const detail = async (req: Request, res: Response) => {
-    const id = req.params.id;
-  
-    const task = await Task.findOne({
-      _id: id,
-      deleted: false
-    });
-  
-    res.json(task);
+  const id = req.params.id;
+
+  const task = await Task.findOne({
+    _id: id,
+    deleted: false
+  });
+
+  res.json(task);
 }
