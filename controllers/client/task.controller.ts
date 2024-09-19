@@ -128,3 +128,23 @@ export const edit = async (req: Request, res: Response) => {
   }
 }
 
+// [PATCH] /tasks/delete
+export const deleteTask = async (req: Request, res: Response) => {
+  try {
+    const ids: string[] = req.body.ids;
+
+    await Task.updateOne({
+      _id: { $in: ids }
+    }, {
+      deleted: true
+    });
+
+    res.json({
+      message: "Cập nhật công việc thành công!"
+    });
+  } catch (error) {
+    res.json({
+      message: "Not Found"
+    });
+  }
+}
