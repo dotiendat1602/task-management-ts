@@ -75,3 +75,24 @@ export const login = async (req: Request, res: Response) => {
         token: user.token
     });
 }
+
+// [GET] /users/profile
+export const profile = async (req: Request, res: Response) => {
+    try {
+        const user = await User.findOne({
+            token: req["tokenVerify"],
+            deleted: false
+        }).select("-password -token");
+    
+        res.json({
+            code: 200,
+            message: "Thành công!",
+            user: user
+        });
+    } catch (error) {
+        res.json({
+            code: 400,
+            message: "Không hợp lệ!"
+        });
+    }
+}
